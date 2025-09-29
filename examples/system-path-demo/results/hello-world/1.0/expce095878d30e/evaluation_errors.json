@@ -1,0 +1,63 @@
+{
+  "problematic_evaluator": {
+    "summary_errors": {
+      "status": "String 'completed' could not be converted to float in problematic_evaluator.summary.status: could not convert string to float: 'completed'",
+      "has_errors": "Boolean False converted to 0.0 in problematic_evaluator.summary.has_errors",
+      "error_rate": "None value converted to 0.0 in problematic_evaluator.summary.error_rate",
+      "categories": "Value ['good', 'bad', 'ugly'] (list) could not be converted to float in problematic_evaluator.summary.categories: float() argument must be a string or a real number, not 'list'",
+      "config": "Value {'threshold': 0.5} (dict) could not be converted to float in problematic_evaluator.summary.config: float() argument must be a string or a real number, not 'dict'"
+    },
+    "per_row_errors": {
+      "row_0": {
+        "string_text": "String 'high_quality' could not be converted to float in problematic_evaluator.row_0.string_text: could not convert string to float: 'high_quality'",
+        "boolean_true": "Boolean True converted to 1.0 in problematic_evaluator.row_0.boolean_true",
+        "boolean_false": "Boolean False converted to 0.0 in problematic_evaluator.row_0.boolean_false",
+        "none_value": "None value converted to 0.0 in problematic_evaluator.row_0.none_value",
+        "empty_string": "Empty string converted to 0.0 in problematic_evaluator.row_0.empty_string",
+        "whitespace_string": "Empty string converted to 0.0 in problematic_evaluator.row_0.whitespace_string",
+        "list_value": "Value [1, 2, 3] (list) could not be converted to float in problematic_evaluator.row_0.list_value: float() argument must be a string or a real number, not 'list'",
+        "dict_value": "Value {'score': 0.9} (dict) could not be converted to float in problematic_evaluator.row_0.dict_value: float() argument must be a string or a real number, not 'dict'"
+      },
+      "row_1": {
+        "string_text": "String 'high_quality' could not be converted to float in problematic_evaluator.row_1.string_text: could not convert string to float: 'high_quality'",
+        "boolean_true": "Boolean True converted to 1.0 in problematic_evaluator.row_1.boolean_true",
+        "boolean_false": "Boolean False converted to 0.0 in problematic_evaluator.row_1.boolean_false",
+        "none_value": "None value converted to 0.0 in problematic_evaluator.row_1.none_value",
+        "empty_string": "Empty string converted to 0.0 in problematic_evaluator.row_1.empty_string",
+        "whitespace_string": "Empty string converted to 0.0 in problematic_evaluator.row_1.whitespace_string",
+        "list_value": "Value [1, 2, 3] (list) could not be converted to float in problematic_evaluator.row_1.list_value: float() argument must be a string or a real number, not 'list'",
+        "dict_value": "Value {'score': 0.9} (dict) could not be converted to float in problematic_evaluator.row_1.dict_value: float() argument must be a string or a real number, not 'dict'"
+      },
+      "row_2": {
+        "string_text": "String 'high_quality' could not be converted to float in problematic_evaluator.row_2.string_text: could not convert string to float: 'high_quality'",
+        "boolean_true": "Boolean True converted to 1.0 in problematic_evaluator.row_2.boolean_true",
+        "boolean_false": "Boolean False converted to 0.0 in problematic_evaluator.row_2.boolean_false",
+        "none_value": "None value converted to 0.0 in problematic_evaluator.row_2.none_value",
+        "empty_string": "Empty string converted to 0.0 in problematic_evaluator.row_2.empty_string",
+        "whitespace_string": "Empty string converted to 0.0 in problematic_evaluator.row_2.whitespace_string",
+        "list_value": "Value [1, 2, 3] (list) could not be converted to float in problematic_evaluator.row_2.list_value: float() argument must be a string or a real number, not 'list'",
+        "dict_value": "Value {'score': 0.9} (dict) could not be converted to float in problematic_evaluator.row_2.dict_value: float() argument must be a string or a real number, not 'dict'"
+      },
+      "row_3": {
+        "string_text": "String 'high_quality' could not be converted to float in problematic_evaluator.row_3.string_text: could not convert string to float: 'high_quality'",
+        "boolean_true": "Boolean True converted to 1.0 in problematic_evaluator.row_3.boolean_true",
+        "boolean_false": "Boolean False converted to 0.0 in problematic_evaluator.row_3.boolean_false",
+        "none_value": "None value converted to 0.0 in problematic_evaluator.row_3.none_value",
+        "empty_string": "Empty string converted to 0.0 in problematic_evaluator.row_3.empty_string",
+        "whitespace_string": "Empty string converted to 0.0 in problematic_evaluator.row_3.whitespace_string",
+        "list_value": "Value [1, 2, 3] (list) could not be converted to float in problematic_evaluator.row_3.list_value: float() argument must be a string or a real number, not 'list'",
+        "dict_value": "Value {'score': 0.9} (dict) could not be converted to float in problematic_evaluator.row_3.dict_value: float() argument must be a string or a real number, not 'dict'"
+      },
+      "row_4": {
+        "string_text": "String 'high_quality' could not be converted to float in problematic_evaluator.row_4.string_text: could not convert string to float: 'high_quality'",
+        "boolean_true": "Boolean True converted to 1.0 in problematic_evaluator.row_4.boolean_true",
+        "boolean_false": "Boolean False converted to 0.0 in problematic_evaluator.row_4.boolean_false",
+        "none_value": "None value converted to 0.0 in problematic_evaluator.row_4.none_value",
+        "empty_string": "Empty string converted to 0.0 in problematic_evaluator.row_4.empty_string",
+        "whitespace_string": "Empty string converted to 0.0 in problematic_evaluator.row_4.whitespace_string",
+        "list_value": "Value [1, 2, 3] (list) could not be converted to float in problematic_evaluator.row_4.list_value: float() argument must be a string or a real number, not 'list'",
+        "dict_value": "Value {'score': 0.9} (dict) could not be converted to float in problematic_evaluator.row_4.dict_value: float() argument must be a string or a real number, not 'dict'"
+      }
+    }
+  }
+}

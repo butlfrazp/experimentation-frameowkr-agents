@@ -1,0 +1,17 @@
+{
+  "problematic_evaluator": {
+    "summary": {
+      "status": "completed",
+      "has_errors": false,
+      "error_rate": null,
+      "categories": [
+        "good",
+        "bad",
+        "ugly"
+      ],
+      "config": {
+        "threshold": 0.5
+      }
+    }
+  }
+}
