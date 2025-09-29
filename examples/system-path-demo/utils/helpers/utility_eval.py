@@ -11,38 +11,54 @@ from typing import Dict, Mapping
 class UtilityEvaluator(BaseEvaluator):
     """Utility evaluator from utils directory."""
     
-    def evaluate(self, row: DataModelRow) -> EvaluatorOutput:
+    def evaluate(self, rows: list[DataModelRow]) -> EvaluatorOutput:
         """Evaluate utility/usefulness of the response."""
-        response = row.data_output or ""
-        input_text = row.data_input.get("input", "")
+        per_row = {}
+        all_scores = []
+        total_question_responses = 0
+        total_greeting_responses = 0
         
-        # Simple utility metrics
-        has_question_response = "?" in input_text and len(response) > 0
-        has_greeting_response = any(word in input_text.lower() for word in ["hello", "hi", "hey"]) and \
-                               any(word in response.lower() for word in ["hello", "hi", "hey"])
-        
-        # Calculate utility score
-        utility_score = 0.0
-        if has_question_response:
-            utility_score += 0.5
-        if has_greeting_response:
-            utility_score += 0.3
-        if len(response) > 10:  # Non-trivial response
-            utility_score += 0.2
+        for row in rows:
+            response = row.data_output or ""
+            input_text = row.data_input.get("input", "")
             
-        utility_score = min(utility_score, 1.0)
+            # Simple utility metrics
+            has_question_response = "?" in input_text and len(response) > 0
+            has_greeting_response = any(word in input_text.lower() for word in ["hello", "hi", "hey"]) and \
+                                   any(word in response.lower() for word in ["hello", "hi", "hey"])
+            
+            # Calculate utility score
+            utility_score = 0.0
+            if has_question_response:
+                utility_score += 0.5
+                total_question_responses += 1
+            if has_greeting_response:
+                utility_score += 0.3
+                total_greeting_responses += 1
+            if len(response) > 10:  # Non-trivial response
+                utility_score += 0.2
+                
+            utility_score = min(utility_score, 1.0)
+            
+            per_row[row.id] = {
+                "utility_score": utility_score,
+                "has_question_response": 1.0 if has_question_response else 0.0,
+                "has_greeting_response": 1.0 if has_greeting_response else 0.0,
+                "response_length": len(response)
+            }
+            all_scores.append(utility_score)
         
-        metrics = {
-            "utility_score": utility_score,
-            "has_question_response": has_question_response,
-            "has_greeting_response": has_greeting_response,
-            "response_length": len(response)
+        # Calculate summary metrics
+        import statistics
+        summary = {
+            "average_utility": statistics.mean(all_scores) if all_scores else 0.0,
+            "question_response_rate": total_question_responses / len(rows) if rows else 0.0,
+            "greeting_response_rate": total_greeting_responses / len(rows) if rows else 0.0,
+            "total_responses": len(rows)
         }
         
         return EvaluatorOutput(
-            evaluator_id=self.evaluator_id,
-            row_id=row.id,
-            metrics=metrics,
-            score=utility_score,
-            passed=utility_score > 0.4
+            name=self.config.name,
+            summary=summary,
+            per_row=per_row
         )
