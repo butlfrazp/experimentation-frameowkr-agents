@@ -1,0 +1,23 @@
+{
+  "dataset": {
+    "name": "math_operations",
+    "version": "1.0",
+    "config": {
+      "expected_output_field": "expected"
+    }
+  },
+  "executable": {
+    "type": "module",
+    "path": "examples/semantic_kernel_plugin/math_experiment.py",
+    "processor": "process_math_experiment",
+    "config": {}
+  },
+  "evaluators": [
+    {
+      "id": "equivalent",
+      "name": "equivalent",
+      "data_mapping": {}
+    }
+  ],
+  "local_mode": true
+}

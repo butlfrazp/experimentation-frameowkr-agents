@@ -1,0 +1,12 @@
+[
+  {
+    "id": "response_relevance_eval",
+    "name": "response_relevance",
+    "data_mapping": {}
+  },
+  {
+    "id": "conversation_quality_eval",
+    "name": "conversation_quality",
+    "data_mapping": {}
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "dataset": {
+    "name": "hello-world",
+    "version": "1.0",
+    "config": {
+      "expected_output_field": "expected_output"
+    }
+  },
+  "executable": {
+    "type": "module",
+    "path": "simple_echo_module",
+    "processor": "run",
+    "config": {}
+  },
+  "evaluators": [
+    {
+      "id": "response_length_eval",
+      "name": "response_length",
+      "data_mapping": {}
+    },
+    {
+      "id": "accuracy_eval",
+      "name": "accuracy_checker",
+      "data_mapping": {}
+    },
+    {
+      "id": "sentiment_eval",
+      "name": "sentiment_evaluator",
+      "data_mapping": {}
+    }
+  ],
+  "local_mode": true,
+  "output_path": "results/"
+}

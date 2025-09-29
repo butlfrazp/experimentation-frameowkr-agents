@@ -1,0 +1,5 @@
+{"request": "Add 15 and 25", "operation_data": "{\"operation\": \"add\", \"first_number\": 15, \"second_number\": 25}", "expected_output": "The sum of 15.0 and 25.0 is 40.0"}
+{"request": "Multiply 7 and 8", "operation_data": "{\"operation\": \"multiply\", \"first_number\": 7, \"second_number\": 8}", "expected_output": "The product of 7.0 and 8.0 is 56.0"}
+{"request": "Square the number 9", "operation_data": "{\"operation\": \"square\", \"first_number\": 9}", "expected_output": "The square of 9.0 is 81.0"}
+{"request": "Add 100 and 200", "operation_data": "{\"operation\": \"add\", \"first_number\": 100, \"second_number\": 200}", "expected_output": "The sum of 100.0 and 200.0 is 300.0"}
+{"request": "Multiply 12 and 5", "operation_data": "{\"operation\": \"multiply\", \"first_number\": 12, \"second_number\": 5}", "expected_output": "The product of 12.0 and 5.0 is 60.0"}

@@ -1,0 +1,2 @@
+# Dependencies for quickstart tutorial
+# No external dependencies needed - uses only built-in evaluators

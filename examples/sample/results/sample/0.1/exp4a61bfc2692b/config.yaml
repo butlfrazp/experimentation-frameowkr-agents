@@ -1,0 +1,16 @@
+dataset:
+  config:
+    expected_output_field: expected
+  name: sample
+  version: '0.1'
+evaluators:
+- data_mapping: {}
+  id: basic_math_eval
+  name: basic_math
+executable:
+  config: {}
+  path: simple_math_module
+  processor: run
+  type: module
+local_mode: true
+output_path: results/

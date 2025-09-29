@@ -1,0 +1,16 @@
+dataset:
+  config:
+    expected_output_field: expected_output
+  name: quickstart_conversation
+  version: '1.0'
+evaluators:
+- data_mapping: {}
+  id: conversation_quality_eval
+  name: conversation_quality
+executable:
+  config: {}
+  path: simple_conversation_module
+  processor: run
+  type: module
+local_mode: true
+output_path: data/experiments

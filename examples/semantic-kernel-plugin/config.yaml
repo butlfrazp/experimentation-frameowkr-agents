@@ -1,0 +1,22 @@
+dataset:
+  name: "sk-math"
+  version: "1.0"
+  config:
+    expected_output_field: expected_output
+
+evaluators:
+  - id: "accuracy_eval"
+    name: "accuracy_checker"
+    data_mapping: {}
+  - id: "response_length_eval"
+    name: "response_length"
+    data_mapping: {}
+
+executable:
+  type: "module"
+  path: "semantic_kernel_math_module"
+  processor: "run"
+  config: {}
+
+local_mode: true
+output_path: "results/"

@@ -1,0 +1,2 @@
+{"id":"row_1","data_input":{"id":"row_1","value":1,"expected":2},"expected_output":2,"data_output":null,"error":{"message":"DataModelRow instance required","code":500},"evaluation_results":{},"metadata":{"dataset_name":"sample","dataset_version":"0.1"}}
+{"id":"row_2","data_input":{"id":"row_2","value":2,"expected":4},"expected_output":4,"data_output":null,"error":{"message":"DataModelRow instance required","code":500},"evaluation_results":{},"metadata":{"dataset_name":"sample","dataset_version":"0.1"}}

@@ -1,0 +1,24 @@
+{
+  "dataset": {
+    "name": "sample",
+    "version": "0.1",
+    "config": {
+      "expected_output_field": "expected"
+    }
+  },
+  "executable": {
+    "type": "module",
+    "path": "simple_math_module",
+    "processor": "run",
+    "config": {}
+  },
+  "evaluators": [
+    {
+      "id": "basic_math_eval",
+      "name": "basic_math",
+      "data_mapping": {}
+    }
+  ],
+  "local_mode": true,
+  "output_path": "results/"
+}

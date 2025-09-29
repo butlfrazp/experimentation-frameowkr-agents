@@ -1,0 +1,5 @@
+{"conversation_id": "1", "input": "Hello", "expected_output": "Hello! How can I help you today?"}
+{"conversation_id": "2", "input": "What is 2+2?", "expected_output": "4"}
+{"conversation_id": "3", "input": "Tell me a joke", "expected_output": "Why don't scientists trust atoms? Because they make up everything!"}
+{"conversation_id": "4", "input": "Calculate 10*5", "expected_output": "50"}
+{"conversation_id": "5", "input": "What's the weather like?", "expected_output": "I don't have access to current weather data."}

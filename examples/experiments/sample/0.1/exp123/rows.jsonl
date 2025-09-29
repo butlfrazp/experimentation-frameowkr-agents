@@ -1,0 +1,2 @@
+{"id":"row-ok","data_input":{"value":1},"expected_output":{"value":1},"data_output":{"value":1},"error":null,"evaluation_results":{"equivalent:match":{"metric_name":"equivalent:match","metric_value":1.0,"metadata":{"evaluator":"equivalent"}}},"metadata":{}}
+{"id":"row-bad","data_input":{"value":2},"expected_output":{"value":4},"data_output":{"value":3},"error":null,"evaluation_results":{"equivalent:match":{"metric_name":"equivalent:match","metric_value":0.0,"metadata":{"evaluator":"equivalent"}}},"metadata":{}}

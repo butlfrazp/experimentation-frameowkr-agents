@@ -1,0 +1,19 @@
+dataset:
+  name: "quickstart_conversation"
+  version: "1.0"
+  config:
+    expected_output_field: "expected_output"
+
+executable:
+  type: "module"
+  path: "simple_conversation_module"
+  processor: "run"
+  config: {}
+
+evaluation:
+  - id: "conversation_quality_eval"
+    name: "conversation_quality"
+    data_mapping: {}
+
+local_mode: true
+output_path: "data/experiments"

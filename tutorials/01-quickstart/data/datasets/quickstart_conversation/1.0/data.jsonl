@@ -1,0 +1,3 @@
+{"input": "Hello, how are you today?", "expected_output": "I'm doing well, thank you for asking! How can I help you today?", "context": "friendly_greeting"}
+{"input": "What's the weather like?", "expected_output": "I don't have access to real-time weather data, but I'd be happy to help you find weather information for your location.", "context": "weather_inquiry"}
+{"input": "Can you help me with Python programming?", "expected_output": "Absolutely! I'd be happy to help with Python programming. What specific topic or problem would you like assistance with?", "context": "programming_help"}

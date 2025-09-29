@@ -1,0 +1,22 @@
+dataset:
+  config:
+    expected_output_field: expected_output
+  name: hello-world
+  version: '1.0'
+evaluators:
+- data_mapping: {}
+  id: response_length_eval
+  name: response_length
+- data_mapping: {}
+  id: accuracy_eval
+  name: accuracy_checker
+- data_mapping: {}
+  id: sentiment_eval
+  name: sentiment_evaluator
+executable:
+  config: {}
+  path: simple_echo_module
+  processor: run
+  type: module
+local_mode: true
+output_path: results/

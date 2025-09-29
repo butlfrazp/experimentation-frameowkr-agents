@@ -1,0 +1,17 @@
+[
+  {
+    "id": "response_length_eval",
+    "name": "response_length",
+    "data_mapping": {}
+  },
+  {
+    "id": "accuracy_eval",
+    "name": "accuracy_checker",
+    "data_mapping": {}
+  },
+  {
+    "id": "sentiment_eval",
+    "name": "sentiment_evaluator",
+    "data_mapping": {}
+  }
+]
