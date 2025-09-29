@@ -211,6 +211,7 @@ $RECYCLE.BIN/
 # Project-specific ignores
 # Experiment artifacts and data
 artifacts/
+results/
 data/experiments/
 logs/
 *.log
@@ -225,6 +226,10 @@ config/local.yaml
 temp_*
 tmp_*
 scratch/
+**/results/
+**/evaluation_errors.json
+**/non_numeric_metrics.json
+**/*exp[a-f0-9]*/
 
 # Model files and large assets
 *.pkl
