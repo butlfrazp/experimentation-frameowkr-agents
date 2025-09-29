@@ -1,20 +1,21 @@
 """Evaluator collection used by the experimentation CLI."""
 
-from .base import BaseEvaluator, EvaluatorOutput
-from .registry import register_evaluator, registry
-from .enhanced_registry import load_evaluators, enhanced_registry
-
 # Import built-in evaluators so they register themselves.
-from . import equivalent  # noqa: F401
-from . import agent_evaluators  # noqa: F401
+from . import (
+    agent_evaluators,  # noqa: F401
+    equivalent,  # noqa: F401
+)
 
 # Import agent evaluators for direct access
 from .agent_evaluators import (
-    ToolCallAccuracyEvaluator,
+    AgentToAgentCommunicationEvaluator,
     ConversationQualityEvaluator,
     SemanticKernelPerformanceEvaluator,
-    AgentToAgentCommunicationEvaluator,
+    ToolCallAccuracyEvaluator,
 )
+from .base import BaseEvaluator, EvaluatorOutput
+from .enhanced_registry import enhanced_registry, load_evaluators
+from .registry import register_evaluator, registry
 
 __all__ = [
     "BaseEvaluator",

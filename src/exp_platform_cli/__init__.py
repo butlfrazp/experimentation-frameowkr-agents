@@ -2,8 +2,8 @@
 
 from importlib import metadata
 
-from .logger import ExperimentLogger, SUCCESS_LEVEL, get_logger
 from .evaluators import BaseEvaluator, EvaluatorOutput, load_evaluators, register_evaluator
+from .logger import SUCCESS_LEVEL, ExperimentLogger, get_logger
 from .models import (
     DataModel,
     DataModelRow,
@@ -15,7 +15,13 @@ from .models import (
     ModuleExecutableConfig,
 )
 from .orchestrator import Orchestrator
-from .services import ConfigLoader, DatasetService, EvaluationService, LocalEvaluationService, CloudEvaluationService
+from .services import (
+    CloudEvaluationService,
+    ConfigLoader,
+    DatasetService,
+    EvaluationService,
+    LocalEvaluationService,
+)
 
 __all__ = [
     "__version__",
@@ -29,7 +35,7 @@ __all__ = [
     "Orchestrator",
     "ConfigLoader",
     "DatasetService",
-    "EvaluationService", 
+    "EvaluationService",
     "LocalEvaluationService",
     "CloudEvaluationService",
     "DataModel",

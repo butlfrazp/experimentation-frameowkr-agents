@@ -4,12 +4,10 @@ import json
 from pathlib import Path
 
 import pytest
-
 from exp_platform_cli.evaluators import load_evaluators
 from exp_platform_cli.models import (
     DataModelRow,
     DatasetConfig,
-    DatasetConfigDetails,
     EvaluatorConfig,
     ExperimentConfig,
     ModuleExecutableConfig,
@@ -47,11 +45,11 @@ def test_equivalent_evaluator_outputs_accuracy() -> None:
 
 def test_local_evaluation_writes_metrics(tmp_path: Path, monkeypatch) -> None:
     output_path = tmp_path / "experiments"
-    
+
     experiment_cfg = ExperimentConfig(
         dataset=DatasetConfig(name="sample", version="0.1"),
         executable=ModuleExecutableConfig(path="sample", processor="run"),
-        output_path=str(output_path)  # Set the output path in the config
+        output_path=str(output_path),  # Set the output path in the config
     )
     evaluator_cfg = EvaluatorConfig(id="equiv", name="equivalent")
     rows = _make_rows()

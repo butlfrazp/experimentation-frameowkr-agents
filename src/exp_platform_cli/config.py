@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import os
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Mapping
 
 
 class MissingConfigError(RuntimeError):
@@ -23,15 +23,13 @@ class EnvironmentConfig:
     connection_name: str = "ads-foundry-connection"
 
     @classmethod
-    def from_mapping(cls, values: Mapping[str, str]) -> "EnvironmentConfig":
+    def from_mapping(cls, values: Mapping[str, str]) -> EnvironmentConfig:
         """Build a config from a mapping, validating required keys."""
 
         def _lookup(key: str) -> str:
             value = values.get(key)
             if not value:
-                raise MissingConfigError(
-                    f"Environment variable '{key}' is required"
-                )
+                raise MissingConfigError(f"Environment variable '{key}' is required")
             return value
 
         return cls(
@@ -44,7 +42,7 @@ class EnvironmentConfig:
         )
 
     @classmethod
-    def from_env(cls) -> "EnvironmentConfig":
+    def from_env(cls) -> EnvironmentConfig:
         """Load configuration from ``os.environ``."""
 
         return cls.from_mapping(os.environ)

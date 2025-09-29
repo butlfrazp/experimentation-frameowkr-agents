@@ -5,9 +5,10 @@ from __future__ import annotations
 import importlib.util
 import inspect
 import sys
+from collections.abc import Callable
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Callable
+from typing import Any
 
 from ..constants import PROJECT_ROOT
 from ..logger import get_logger
@@ -48,13 +49,13 @@ class ModuleExecutable(BaseExecutable):
     def _load_module(self, config: ModuleExecutableConfig) -> ModuleType:
         # Setup custom Python paths if specified (keep them for entire execution)
         self._setup_python_paths(config)
-        
+
         raw_path = Path(config.path)
         if not raw_path.is_absolute():
             # Try current working directory first, then project root
             cwd_path = Path.cwd() / raw_path
             cwd_py_path = Path.cwd() / f"{raw_path}.py"
-            
+
             if cwd_path.exists():
                 raw_path = cwd_path.resolve()
             elif cwd_py_path.exists():
@@ -69,7 +70,7 @@ class ModuleExecutable(BaseExecutable):
                     raw_path = project_py_path.resolve()
                 else:
                     raw_path = (PROJECT_ROOT / raw_path).resolve()
-                    
+
         if raw_path.is_dir():
             raw_path = raw_path / f"{config.processor}.py"
         if not raw_path.exists():
@@ -84,21 +85,15 @@ class ModuleExecutable(BaseExecutable):
 
     def _resolve_target(self, module: ModuleType, attr: str) -> Callable[..., Any]:
         if not hasattr(module, attr):
-            raise AttributeError(
-                f"Module '{module.__name__}' does not expose '{attr}'"
-            )
+            raise AttributeError(f"Module '{module.__name__}' does not expose '{attr}'")
         target = getattr(module, attr)
         if inspect.isclass(target):
             instance = target()  # type: ignore[call-arg]
             if hasattr(instance, "run"):
-                return getattr(instance, "run")
-            raise TypeError(
-                f"Class '{attr}' in module '{module.__name__}' lacks a 'run' method"
-            )
+                return instance.run
+            raise TypeError(f"Class '{attr}' in module '{module.__name__}' lacks a 'run' method")
         if not callable(target):
-            raise TypeError(
-                f"Attribute '{attr}' in module '{module.__name__}' is not callable"
-            )
+            raise TypeError(f"Attribute '{attr}' in module '{module.__name__}' is not callable")
         return target
 
     def _invoke_callable(self, target: Callable[..., Any], kwargs: dict[str, Any]) -> Any:
@@ -122,7 +117,7 @@ class ModuleExecutable(BaseExecutable):
             for py_file in path.glob("*.py"):
                 if py_file.name.startswith("__"):
                     continue  # Skip __init__.py, __pycache__, etc.
-                
+
                 module_name = py_file.stem
                 try:
                     # Import the module to trigger evaluator registration
@@ -133,7 +128,7 @@ class ModuleExecutable(BaseExecutable):
                         log.debug(f"Imported evaluator module: {module_name} from {py_file}")
                 except Exception as e:
                     log.debug(f"Failed to import {module_name} from {py_file}: {e}")
-                    
+
         except Exception as e:
             log.debug(f"Error discovering evaluators in {path}: {e}")
 
@@ -141,10 +136,10 @@ class ModuleExecutable(BaseExecutable):
         """Add custom directories to sys.path for module loading and discover evaluators."""
         if not config.python_path:
             return
-            
+
         # Store original sys.path for cleanup
         self._original_sys_path = sys.path.copy()
-        
+
         # Convert relative paths to absolute and add to sys.path
         for path_str in config.python_path:
             path = Path(path_str)
@@ -156,16 +151,16 @@ class ModuleExecutable(BaseExecutable):
                 else:
                     # Fallback to project root
                     path = (PROJECT_ROOT / path).resolve()
-            
+
             # Add to sys.path if directory exists and not already present
             path_str_resolved = str(path)
             if path.exists() and path.is_dir() and path_str_resolved not in sys.path:
                 sys.path.insert(0, path_str_resolved)
                 log.debug(f"Added to Python path: {path_str_resolved}")
-                
+
                 # Auto-discover and import Python modules in this path
                 self._discover_and_import_evaluators(path)
-    
+
     def _cleanup_python_paths(self) -> None:
         """Restore original sys.path after module loading."""
         if self._original_sys_path is not None:

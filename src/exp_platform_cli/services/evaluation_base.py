@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Iterable, Sequence
+from collections.abc import Iterable, Sequence
 
 from ..models import DataModelRow, EvaluatorConfig, ExperimentConfig
 

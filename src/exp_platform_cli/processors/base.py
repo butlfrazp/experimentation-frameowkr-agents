@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Generic, Optional, TypeVar
+from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
@@ -15,7 +15,7 @@ ConfigT = TypeVar("ConfigT", bound=BaseModel | dict)
 class BaseProcessor(ABC, Generic[ConfigT]):
     """Lightweight base class for processors executed via the CLI."""
 
-    def __init__(self, config: Optional[ConfigT] = None) -> None:
+    def __init__(self, config: ConfigT | None = None) -> None:
         self.config = config
 
     @abstractmethod

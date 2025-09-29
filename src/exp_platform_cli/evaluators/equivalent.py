@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Dict
-
 from ..logger import get_logger
 from ..models import DataModelRow
 from .base import BaseEvaluator, EvaluatorOutput
@@ -18,9 +16,9 @@ class EquivalentEvaluator(BaseEvaluator):
 
     def evaluate(self, rows: list[DataModelRow]) -> EvaluatorOutput:
         """Evaluate each row individually for equivalence."""
-        per_row: Dict[str, Dict[str, float]] = {}
+        per_row: dict[str, dict[str, float]] = {}
         total_matches = 0
-        
+
         for row in rows:
             row_result = self._evaluate_single_row(row)
             per_row[row.id] = row_result
@@ -33,18 +31,18 @@ class EquivalentEvaluator(BaseEvaluator):
             accuracy,
             len(rows),
         )
-        
+
         return EvaluatorOutput(
             name=self.config.name,
             summary={"accuracy": accuracy, "match_rate": accuracy},
             per_row=per_row,
         )
-    
-    def _evaluate_single_row(self, row: DataModelRow) -> Dict[str, float]:
+
+    def _evaluate_single_row(self, row: DataModelRow) -> dict[str, float]:
         """Evaluate a single row for equivalence - row-by-row processing."""
         expected = row.expected_output
         actual = row.data_output
-        
+
         # Handle different data types consistently
         if expected is None and actual is None:
             match = 1.0
@@ -55,7 +53,7 @@ class EquivalentEvaluator(BaseEvaluator):
             expected_str = str(expected).strip().lower()
             actual_str = str(actual).strip().lower()
             match = float(1.0 if expected_str == actual_str else 0.0)
-        
+
         return {
             "match": match,
             "score": match,  # Provide score for consistency with foundry evaluators

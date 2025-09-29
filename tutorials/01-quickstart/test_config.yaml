@@ -1,0 +1,13 @@
+name: "quickstart_test"
+description: "Test experiment configuration"
+
+dataset:
+  name: "quickstart_conversation"
+  version: "1.0"
+
+executable:
+  type: "module"
+  path: "simple_conversation_module"
+  processor: "run"
+
+evaluators: []

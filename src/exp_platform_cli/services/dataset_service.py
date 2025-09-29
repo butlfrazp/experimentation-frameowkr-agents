@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 import pandas as pd
 import yaml
@@ -64,7 +64,7 @@ class DatasetService:
             else:
                 # Default to unified data structure
                 artifact_root = PROJECT_ROOT / "data" / "experiments"
-        
+
         # Structure: output_path/dataset_name/dataset_version/experiment_id
         output_dir = artifact_root / name / version / experiment_id
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -80,7 +80,7 @@ class DatasetService:
             config.model_dump_json(indent=2),
             encoding="utf-8",
         )
-        
+
         config_yaml_path = output_dir / "config.yaml"
         config_yaml_path.write_text(
             yaml.dump(config.model_dump(), default_flow_style=False, indent=2),

@@ -1,9 +1,7 @@
 from logging import DEBUG, Handler, LogRecord
-from typing import List
 
 import pytest
-
-from exp_platform_cli.logger import ExperimentLogger, SUCCESS_LEVEL
+from exp_platform_cli.logger import SUCCESS_LEVEL, ExperimentLogger
 
 
 @pytest.fixture
@@ -13,7 +11,7 @@ def exp_logger() -> ExperimentLogger:
 
 
 def test_success_level_registered(exp_logger: ExperimentLogger) -> None:
-    records: List[LogRecord] = []
+    records: list[LogRecord] = []
 
     class CaptureHandler(Handler):
         def emit(self, record: LogRecord) -> None:  # type: ignore[override]
@@ -33,7 +31,9 @@ def test_success_level_registered(exp_logger: ExperimentLogger) -> None:
     assert record.getMessage() == "[success]Experiment complete[/]"
 
 
-def test_banner_outputs_rule(exp_logger: ExperimentLogger, capsys: pytest.CaptureFixture[str]) -> None:
+def test_banner_outputs_rule(
+    exp_logger: ExperimentLogger, capsys: pytest.CaptureFixture[str]
+) -> None:
     exp_logger.banner("My Banner")
     captured = capsys.readouterr()
     assert "My Banner" in captured.out

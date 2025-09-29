@@ -7,11 +7,7 @@ from pathlib import Path
 
 # First, add the paths manually (simulating python_path)
 current_dir = Path(__file__).parent
-nested_paths = [
-    "nested/deep/evaluators",
-    "utils/helpers", 
-    "shared/common"
-]
+nested_paths = ["nested/deep/evaluators", "utils/helpers", "shared/common"]
 
 print("🔧 Adding custom paths to sys.path:")
 for path_str in nested_paths:
@@ -24,12 +20,14 @@ for path_str in nested_paths:
 print("\n📦 Importing evaluator modules:")
 try:
     import complex_evaluator
+
     print("✅ Imported complex_evaluator")
 except ImportError as e:
     print(f"❌ Failed to import complex_evaluator: {e}")
 
 try:
     import utility_eval
+
     print("✅ Imported utility_eval")
 except ImportError as e:
     print(f"❌ Failed to import utility_eval: {e}")
@@ -46,7 +44,7 @@ from exp_platform_cli.models import EvaluatorConfig
 
 test_configs = [
     EvaluatorConfig(id="deep_nested_eval", name="deep_nested_evaluator", data_mapping={}),
-    EvaluatorConfig(id="utils_eval", name="utility_evaluator", data_mapping={})
+    EvaluatorConfig(id="utils_eval", name="utility_evaluator", data_mapping={}),
 ]
 
 print("\n🎯 Testing evaluator creation:")

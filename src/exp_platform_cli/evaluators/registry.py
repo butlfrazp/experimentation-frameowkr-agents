@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Callable, Dict, Iterable, Type
+from collections.abc import Callable, Iterable
 
 from ..models import EvaluatorConfig
 from .base import BaseEvaluator
@@ -12,20 +12,22 @@ class EvaluatorRegistry:
     """Simple name-based registry for evaluator implementations."""
 
     def __init__(self) -> None:
-        self._registry: Dict[str, Type[BaseEvaluator]] = {}
+        self._registry: dict[str, type[BaseEvaluator]] = {}
 
-    def register(self, name: str, evaluator: Type[BaseEvaluator]) -> None:
+    def register(self, name: str, evaluator: type[BaseEvaluator]) -> None:
         self._registry[name.lower()] = evaluator
 
-    def decorator(self, name: str | None = None) -> Callable[[Type[BaseEvaluator]], Type[BaseEvaluator]]:
-        def _wrap(cls: Type[BaseEvaluator]) -> Type[BaseEvaluator]:
+    def decorator(
+        self, name: str | None = None
+    ) -> Callable[[type[BaseEvaluator]], type[BaseEvaluator]]:
+        def _wrap(cls: type[BaseEvaluator]) -> type[BaseEvaluator]:
             key = name or cls.__name__
             self.register(key, cls)
             return cls
 
         return _wrap
 
-    def get(self, name: str) -> Type[BaseEvaluator] | None:
+    def get(self, name: str) -> type[BaseEvaluator] | None:
         return self._registry.get(name.lower())
 
     def create(self, config: EvaluatorConfig) -> BaseEvaluator | None:

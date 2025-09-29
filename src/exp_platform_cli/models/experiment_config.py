@@ -3,10 +3,9 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, Dict, List, Literal, Union
+from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
-from pydantic import ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.functional_validators import field_validator
 
 
@@ -22,7 +21,7 @@ class EvaluatorConfig(BaseModel):
 
     id: str
     name: str
-    data_mapping: Dict[str, str] = Field(default_factory=dict)
+    data_mapping: dict[str, str] = Field(default_factory=dict)
 
 
 class DatasetConfigDetails(BaseModel):
@@ -54,12 +53,10 @@ class ModuleExecutableConfig(BaseExecutableConfig):
     type: Literal["module"] = "module"
     path: str
     processor: str
-    config: Dict[str, Union[str, int, float, bool]] = Field(
-        default_factory=dict
-    )
-    python_path: List[str] = Field(
+    config: dict[str, str | int | float | bool] = Field(default_factory=dict)
+    python_path: list[str] = Field(
         default_factory=list,
-        description="Additional directories to add to sys.path for module loading"
+        description="Additional directories to add to sys.path for module loading",
     )
 
     def run_descriptor(self) -> str:  # pragma: no cover - simple formatting
@@ -73,7 +70,7 @@ class UnknownExecutableConfig(BaseExecutableConfig):
 
 
 ExecutableConfig = Annotated[
-    Union[ModuleExecutableConfig, UnknownExecutableConfig],
+    ModuleExecutableConfig | UnknownExecutableConfig,
     Field(discriminator="type"),
 ]
 
@@ -85,18 +82,16 @@ class ExperimentConfig(BaseModel):
 
     dataset: DatasetConfig
     executable: ExecutableConfig
-    evaluators: List[EvaluatorConfig] = Field(
-        default_factory=list, alias="evaluation"
-    )
+    evaluators: list[EvaluatorConfig] = Field(default_factory=list, alias="evaluation")
     local_mode: bool = False
     output_path: str | None = Field(
-        default=None, 
+        default=None,
         description="Directory path where experiment results will be stored. "
-                   "Results are organized by dataset name and version within this path."
+        "Results are organized by dataset name and version within this path.",
     )
 
     @property
-    def evaluation(self) -> List[EvaluatorConfig]:  # pragma: no cover
+    def evaluation(self) -> list[EvaluatorConfig]:  # pragma: no cover
         return self.evaluators
 
     @field_validator("executable", mode="before")

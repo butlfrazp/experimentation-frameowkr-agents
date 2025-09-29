@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Mapping
 from dataclasses import dataclass, field
-from typing import Dict, Mapping
 
 from ..models import DataModelRow, EvaluatorConfig
 
@@ -15,7 +15,7 @@ class EvaluatorOutput:
 
     name: str
     summary: Mapping[str, float]
-    per_row: Dict[str, Mapping[str, float]] = field(default_factory=dict)
+    per_row: dict[str, Mapping[str, float]] = field(default_factory=dict)
 
 
 class BaseEvaluator(ABC):

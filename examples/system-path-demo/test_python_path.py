@@ -3,16 +3,11 @@ Simple test script to verify that python_path functionality works.
 """
 
 import sys
-import os
 from pathlib import Path
 
 # Add the nested directories to Python path (simulating what the platform should do)
 current_dir = Path(__file__).parent
-nested_paths = [
-    "nested/deep/evaluators",
-    "utils/helpers", 
-    "shared/common"
-]
+nested_paths = ["nested/deep/evaluators", "utils/helpers", "shared/common"]
 
 print("🔧 Testing Python Path Setup")
 print("=" * 40)
@@ -29,18 +24,21 @@ print("\n📦 Testing imports:")
 
 try:
     import complex_evaluator
+
     print("✅ Successfully imported complex_evaluator")
 except ImportError as e:
     print(f"❌ Failed to import complex_evaluator: {e}")
 
 try:
     import utility_eval
-    print("✅ Successfully imported utility_eval") 
+
+    print("✅ Successfully imported utility_eval")
 except ImportError as e:
     print(f"❌ Failed to import utility_eval: {e}")
 
 try:
     from text_utils import calculate_readability_score
+
     print("✅ Successfully imported text_utils functions")
 except ImportError as e:
     print(f"❌ Failed to import text_utils: {e}")

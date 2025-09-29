@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass
 from functools import lru_cache
-from typing import Optional
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -38,7 +37,7 @@ class ExperimentLogger:
     name: str = "exp.cli"
     level: int = logging.INFO
     theme: Theme = DEFAULT_THEME
-    console: Optional[Console] = None
+    console: Console | None = None
 
     def __post_init__(self) -> None:
         self.console = self.console or Console(theme=self.theme, highlight=False)

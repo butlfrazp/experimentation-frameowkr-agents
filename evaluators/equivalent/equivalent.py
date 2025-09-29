@@ -1,5 +1,6 @@
-from typing import Any, Dict, Iterable
 import math
+from collections.abc import Iterable
+from typing import Any
 
 
 class EquivalentEvaluator:
@@ -22,7 +23,7 @@ class EquivalentEvaluator:
         response: Any,
         ground_truth: Any,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         r_norm, r_type = self._normalize(response)
         g_norm, g_type = self._normalize(ground_truth)
 
@@ -41,10 +42,7 @@ class EquivalentEvaluator:
             return self._score_numeric(r_norm, g_norm)
 
         # Iterable (set-like) overlap scoring for unordered collections
-        if (
-            self._is_iterable_non_string(r_norm)
-            and self._is_iterable_non_string(g_norm)
-        ):
+        if self._is_iterable_non_string(r_norm) and self._is_iterable_non_string(g_norm):
             return self._score_iterables(r_norm, g_norm)
 
         # Fallback string comparison (case & whitespace insensitive)
@@ -80,12 +78,12 @@ class EquivalentEvaluator:
     def _normalize(self, val: Any):
         """Produce a canonical comparable form.
 
-        - Dicts -> sorted list of (key, normalized_value)
-        - Sets -> sorted list of normalized elements
-        - Lists/Tuples -> list of normalized elements
-        - Strings -> stripped lowercased
-    - Numbers -> float (int retention for equality path not required)
-        - Other -> unchanged
+            - Dicts -> sorted list of (key, normalized_value)
+            - Sets -> sorted list of normalized elements
+            - Lists/Tuples -> list of normalized elements
+            - Strings -> stripped lowercased
+        - Numbers -> float (int retention for equality path not required)
+            - Other -> unchanged
         """
         if isinstance(val, dict):
             items = sorted((k, self._normalize(v)[0]) for k, v in val.items())
@@ -111,7 +109,7 @@ class EquivalentEvaluator:
     def _is_iterable_non_string(self, v: Any) -> bool:
         return isinstance(v, (list, tuple, set))
 
-    def _score_numeric(self, r: float, g: float) -> Dict[str, Any]:
+    def _score_numeric(self, r: float, g: float) -> dict[str, Any]:
         if any(math.isnan(x) for x in [r, g]):  # pragma: no cover
             return {
                 "score": 0.0,
