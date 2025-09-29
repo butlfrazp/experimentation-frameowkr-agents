@@ -1,0 +1,23 @@
+dataset:
+  config:
+    expected_output_field: expected_output
+  name: hello-world
+  version: '1.0'
+evaluators:
+- data_mapping: {}
+  id: deep_nested_eval
+  name: deep_nested_evaluator
+- data_mapping: {}
+  id: utils_eval
+  name: utility_evaluator
+executable:
+  config: {}
+  path: main_processor
+  processor: run
+  python_path:
+  - nested/deep/evaluators
+  - utils/helpers
+  - shared/common
+  type: module
+local_mode: true
+output_path: results/
