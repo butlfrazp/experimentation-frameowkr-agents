@@ -57,6 +57,10 @@ class ModuleExecutableConfig(BaseExecutableConfig):
     config: Dict[str, Union[str, int, float, bool]] = Field(
         default_factory=dict
     )
+    python_path: List[str] = Field(
+        default_factory=list,
+        description="Additional directories to add to sys.path for module loading"
+    )
 
     def run_descriptor(self) -> str:  # pragma: no cover - simple formatting
         return f"Module(path={self.path}, processor={self.processor})"

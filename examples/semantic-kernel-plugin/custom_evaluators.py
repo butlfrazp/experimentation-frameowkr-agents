@@ -155,7 +155,7 @@ class SentimentEvaluator(BaseEvaluator):
             "negative_ratio": sentiment_counts["negative"] / total if total > 0 else 0.0,
             "neutral_ratio": sentiment_counts["neutral"] / total if total > 0 else 0.0
         }
-        
+
         return EvaluatorOutput(
             name=self.config.name,
             summary=summary,

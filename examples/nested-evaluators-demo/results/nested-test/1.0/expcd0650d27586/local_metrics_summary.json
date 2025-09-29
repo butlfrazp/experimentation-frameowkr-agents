@@ -1,0 +1,13 @@
+{
+  "advanced_quality": {
+    "average_quality": 0.75,
+    "min_quality": 0.6666666666666666,
+    "max_quality": 0.9333333333333333,
+    "quality_std": 0.1261979632400061
+  },
+  "advanced_coherence": {
+    "average_coherence": 0.30000000000000004,
+    "coherent_responses": 0,
+    "total_responses": 4
+  }
+}

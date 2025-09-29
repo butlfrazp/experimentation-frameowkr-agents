@@ -1,0 +1,12 @@
+[
+  {
+    "id": "test_0",
+    "input": "Hello world!",
+    "expected_output": "Hello! How can I help you?"
+  },
+  {
+    "id": "test_1", 
+    "input": "What is 2+2?",
+    "expected_output": "2+2 equals 4"
+  }
+]

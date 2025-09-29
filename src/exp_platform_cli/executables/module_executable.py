@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import inspect
+import sys
 from pathlib import Path
 from types import ModuleType
 from typing import Any, Callable
@@ -21,6 +22,7 @@ class ModuleExecutable(BaseExecutable):
 
     def __init__(self, row: DataModelRow, config: ModuleExecutableConfig) -> None:
         super().__init__(row, config)
+        self._original_sys_path = None
         self._module = self._load_module(config)
         self._target = self._resolve_target(self._module, config.processor)
 
@@ -41,38 +43,45 @@ class ModuleExecutable(BaseExecutable):
 
     # ------------------------------------------------------------------
     def _load_module(self, config: ModuleExecutableConfig) -> ModuleType:
-        raw_path = Path(config.path)
-        if not raw_path.is_absolute():
-            # Try current working directory first, then project root
-            cwd_path = Path.cwd() / raw_path
-            cwd_py_path = Path.cwd() / f"{raw_path}.py"
-            
-            if cwd_path.exists():
-                raw_path = cwd_path.resolve()
-            elif cwd_py_path.exists():
-                raw_path = cwd_py_path.resolve()
-            else:
-                # Fallback to project root
-                project_path = PROJECT_ROOT / raw_path
-                project_py_path = PROJECT_ROOT / f"{raw_path}.py"
-                if project_path.exists():
-                    raw_path = project_path.resolve()
-                elif project_py_path.exists():
-                    raw_path = project_py_path.resolve()
+        # Setup custom Python paths if specified
+        self._setup_python_paths(config)
+        
+        try:
+            raw_path = Path(config.path)
+            if not raw_path.is_absolute():
+                # Try current working directory first, then project root
+                cwd_path = Path.cwd() / raw_path
+                cwd_py_path = Path.cwd() / f"{raw_path}.py"
+                
+                if cwd_path.exists():
+                    raw_path = cwd_path.resolve()
+                elif cwd_py_path.exists():
+                    raw_path = cwd_py_path.resolve()
                 else:
-                    raw_path = (PROJECT_ROOT / raw_path).resolve()
-                    
-        if raw_path.is_dir():
-            raw_path = raw_path / f"{config.processor}.py"
-        if not raw_path.exists():
-            raise FileNotFoundError(f"Executable module not found: {raw_path}")
+                    # Fallback to project root
+                    project_path = PROJECT_ROOT / raw_path
+                    project_py_path = PROJECT_ROOT / f"{raw_path}.py"
+                    if project_path.exists():
+                        raw_path = project_path.resolve()
+                    elif project_py_path.exists():
+                        raw_path = project_py_path.resolve()
+                    else:
+                        raw_path = (PROJECT_ROOT / raw_path).resolve()
+                        
+            if raw_path.is_dir():
+                raw_path = raw_path / f"{config.processor}.py"
+            if not raw_path.exists():
+                raise FileNotFoundError(f"Executable module not found: {raw_path}")
 
-        spec = importlib.util.spec_from_file_location(raw_path.stem, raw_path)
-        if spec is None or spec.loader is None:
-            raise ImportError(f"Unable to load module from {raw_path}")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)  # type: ignore[arg-type]
-        return module
+            spec = importlib.util.spec_from_file_location(raw_path.stem, raw_path)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Unable to load module from {raw_path}")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)  # type: ignore[arg-type]
+            return module
+        finally:
+            # Cleanup: restore original sys.path
+            self._cleanup_python_paths()
 
     def _resolve_target(self, module: ModuleType, attr: str) -> Callable[..., Any]:
         if not hasattr(module, attr):
@@ -106,3 +115,35 @@ class ModuleExecutable(BaseExecutable):
             bound["row"] = self._row
             bound["data_model_row"] = self._row
         return target(**bound)
+
+    def _setup_python_paths(self, config: ModuleExecutableConfig) -> None:
+        """Add custom directories to sys.path for module loading."""
+        if not config.python_path:
+            return
+            
+        # Store original sys.path for cleanup
+        self._original_sys_path = sys.path.copy()
+        
+        # Convert relative paths to absolute and add to sys.path
+        for path_str in config.python_path:
+            path = Path(path_str)
+            if not path.is_absolute():
+                # Try relative to current working directory first
+                cwd_path = Path.cwd() / path
+                if cwd_path.exists():
+                    path = cwd_path.resolve()
+                else:
+                    # Fallback to project root
+                    path = (PROJECT_ROOT / path).resolve()
+            
+            # Add to sys.path if directory exists and not already present
+            path_str_resolved = str(path)
+            if path.exists() and path.is_dir() and path_str_resolved not in sys.path:
+                sys.path.insert(0, path_str_resolved)
+                log.debug(f"Added to Python path: {path_str_resolved}")
+    
+    def _cleanup_python_paths(self) -> None:
+        """Restore original sys.path after module loading."""
+        if self._original_sys_path is not None:
+            sys.path[:] = self._original_sys_path
+            self._original_sys_path = None

@@ -1,0 +1,4 @@
+{"input": "Hello, how are you?", "expected_output": "I'm doing well, thank you for asking!"}
+{"input": "What is 2 + 2?", "expected_output": "2 + 2 equals 4"}
+{"input": "Explain photosynthesis", "expected_output": "Photosynthesis is the process by which plants convert sunlight into energy"}
+{"input": "Tell me a joke", "expected_output": "Why don't scientists trust atoms? Because they make up everything!"}
