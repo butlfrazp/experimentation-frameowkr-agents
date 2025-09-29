@@ -40,48 +40,47 @@ class ModuleExecutable(BaseExecutable):
             log.exception("Executable failed", exc_info=exc)
             self._row.error = DataModelRowError(message=str(exc), code=500)
             return self._row
+        finally:
+            # Cleanup python paths when execution is complete
+            self._cleanup_python_paths()
 
     # ------------------------------------------------------------------
     def _load_module(self, config: ModuleExecutableConfig) -> ModuleType:
-        # Setup custom Python paths if specified
+        # Setup custom Python paths if specified (keep them for entire execution)
         self._setup_python_paths(config)
         
-        try:
-            raw_path = Path(config.path)
-            if not raw_path.is_absolute():
-                # Try current working directory first, then project root
-                cwd_path = Path.cwd() / raw_path
-                cwd_py_path = Path.cwd() / f"{raw_path}.py"
-                
-                if cwd_path.exists():
-                    raw_path = cwd_path.resolve()
-                elif cwd_py_path.exists():
-                    raw_path = cwd_py_path.resolve()
+        raw_path = Path(config.path)
+        if not raw_path.is_absolute():
+            # Try current working directory first, then project root
+            cwd_path = Path.cwd() / raw_path
+            cwd_py_path = Path.cwd() / f"{raw_path}.py"
+            
+            if cwd_path.exists():
+                raw_path = cwd_path.resolve()
+            elif cwd_py_path.exists():
+                raw_path = cwd_py_path.resolve()
+            else:
+                # Fallback to project root
+                project_path = PROJECT_ROOT / raw_path
+                project_py_path = PROJECT_ROOT / f"{raw_path}.py"
+                if project_path.exists():
+                    raw_path = project_path.resolve()
+                elif project_py_path.exists():
+                    raw_path = project_py_path.resolve()
                 else:
-                    # Fallback to project root
-                    project_path = PROJECT_ROOT / raw_path
-                    project_py_path = PROJECT_ROOT / f"{raw_path}.py"
-                    if project_path.exists():
-                        raw_path = project_path.resolve()
-                    elif project_py_path.exists():
-                        raw_path = project_py_path.resolve()
-                    else:
-                        raw_path = (PROJECT_ROOT / raw_path).resolve()
-                        
-            if raw_path.is_dir():
-                raw_path = raw_path / f"{config.processor}.py"
-            if not raw_path.exists():
-                raise FileNotFoundError(f"Executable module not found: {raw_path}")
+                    raw_path = (PROJECT_ROOT / raw_path).resolve()
+                    
+        if raw_path.is_dir():
+            raw_path = raw_path / f"{config.processor}.py"
+        if not raw_path.exists():
+            raise FileNotFoundError(f"Executable module not found: {raw_path}")
 
-            spec = importlib.util.spec_from_file_location(raw_path.stem, raw_path)
-            if spec is None or spec.loader is None:
-                raise ImportError(f"Unable to load module from {raw_path}")
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)  # type: ignore[arg-type]
-            return module
-        finally:
-            # Cleanup: restore original sys.path
-            self._cleanup_python_paths()
+        spec = importlib.util.spec_from_file_location(raw_path.stem, raw_path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"Unable to load module from {raw_path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)  # type: ignore[arg-type]
+        return module
 
     def _resolve_target(self, module: ModuleType, attr: str) -> Callable[..., Any]:
         if not hasattr(module, attr):
@@ -116,8 +115,30 @@ class ModuleExecutable(BaseExecutable):
             bound["data_model_row"] = self._row
         return target(**bound)
 
+    def _discover_and_import_evaluators(self, path: Path) -> None:
+        """Discover and import Python modules in the given path to register evaluators."""
+        try:
+            # Look for Python files in the directory
+            for py_file in path.glob("*.py"):
+                if py_file.name.startswith("__"):
+                    continue  # Skip __init__.py, __pycache__, etc.
+                
+                module_name = py_file.stem
+                try:
+                    # Import the module to trigger evaluator registration
+                    spec = importlib.util.spec_from_file_location(module_name, py_file)
+                    if spec is not None and spec.loader is not None:
+                        module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(module)
+                        log.debug(f"Imported evaluator module: {module_name} from {py_file}")
+                except Exception as e:
+                    log.debug(f"Failed to import {module_name} from {py_file}: {e}")
+                    
+        except Exception as e:
+            log.debug(f"Error discovering evaluators in {path}: {e}")
+
     def _setup_python_paths(self, config: ModuleExecutableConfig) -> None:
-        """Add custom directories to sys.path for module loading."""
+        """Add custom directories to sys.path for module loading and discover evaluators."""
         if not config.python_path:
             return
             
@@ -141,6 +162,9 @@ class ModuleExecutable(BaseExecutable):
             if path.exists() and path.is_dir() and path_str_resolved not in sys.path:
                 sys.path.insert(0, path_str_resolved)
                 log.debug(f"Added to Python path: {path_str_resolved}")
+                
+                # Auto-discover and import Python modules in this path
+                self._discover_and_import_evaluators(path)
     
     def _cleanup_python_paths(self) -> None:
         """Restore original sys.path after module loading."""
